@@ -38,17 +38,13 @@ public class SpotifyRepository {
     }
 
     public User createUser(String name, String mobile) {
-        User user = new User();
-        user.setName(name);
-        user.setMobile(mobile);
+        User user = new User(name,mobile);
         users.add(user);
         return user;
     }
 
     public Artist createArtist(String name) {
-        Artist artist = new Artist();
-        artist.setName(name);
-        artist.setLikes(0);
+        Artist artist = new Artist(name);
         artists.add(artist);
         return artist;
     }
@@ -63,31 +59,26 @@ public class SpotifyRepository {
         }
         if(artist1 == null){
             artist1 = createArtist(artistName);
-            Album album = new Album();
-            album.setTitle(title);
-            album.setReleaseDate(new Date());
-
+            Album album = new Album(title);
             albums.add(album);
-
             List<Album> list = new ArrayList<>();
             list.add(album);
             artistAlbumMap.put(artist1,list);
             return album;
         }
         else{
-            Album album = new Album();
-            album.setTitle(title);
-            album.setReleaseDate(new Date());
-
+            Album album = new Album(title);
             albums.add(album);
-
-            List<Album> list = new ArrayList<>();
-            if(list == null){
-                list = new ArrayList<>();
-
+            if(artistAlbumMap.containsKey(artist1) == true){
+                List<Album> albumList = artistAlbumMap.get(artist1);
+                albumList.add(album);
+                artistAlbumMap.put(artist1,albumList);
             }
-            list.add(album);
-            artistAlbumMap.put(artist1 ,list);
+            else {
+                List<Album> albumList = new ArrayList<>();
+                albumList.add(album);
+                artistAlbumMap.put(artist1,albumList);
+            }
             return album;
         }
     }
